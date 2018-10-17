@@ -56,7 +56,7 @@ def KLT_featureTracking(image_ref, image_cur, px_ref):
     elif list(good).count(
             True) <= 5:  # If less than 5 good points, it uses the features obtain without the backtracking check
         print 'Warning: No match was good. Returns the list without good point correspondence.'
-        return kp1, kp2
+        return kp1, kp2, None
 
     # Create new lists with the good features
     n_kp1, n_kp2 = [], []

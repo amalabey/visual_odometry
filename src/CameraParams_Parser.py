@@ -50,7 +50,7 @@ class CameraParams:
 
         # Read the Camera Params file
         try:
-
+            print "Text path:"+txt_file
             with open(txt_file) as f:
                 self.txt = f.readlines()
             idx = 59  # The index where the attributes begin
@@ -66,7 +66,8 @@ class CameraParams:
                 raise IOError
 
             self.format = self.txt[idx+1].strip()
-            self.images = glob.glob(self.folder + '/*.' + self.format)
+            self.images = sorted(glob.glob(self.folder + '/*.' + self.format))
+            print "Test: " + self.folder + '/*.' + self.format
             if len(self.images) == 0:
                 raise TypeError
 

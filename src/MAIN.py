@@ -26,6 +26,11 @@ https://github.com/uoip/monoVO-python
 
 """
 
+import os, sys
+os.chdir(os.path.expanduser('/home/amal/.virtualenvs/OpenCV-master-py2/local/lib'))
+sys.path.append(os.path.expanduser('/home/amal/.virtualenvs/OpenCV-master-py2/local/lib/python2.7/dist-packages'))
+
+
 import argparse
 from os import path
 from time import sleep
@@ -37,6 +42,7 @@ import Ground_Truth as GT
 import Trajectory_Tools as TT
 from Common_Modules import *
 from py_MVO import VisualOdometry
+
 
 
 def run():
@@ -82,7 +88,7 @@ def run():
     TT.printProgress(img_id, len(images)-1, prefix='Progress:', suffix='Complete', barLength=50)
 
     for i, img_path in enumerate(images):  # Iterating through all images
-
+        print img_path
         k = cv2.waitKey(10) & 0xFF
         if k == 27:  # Wait for ESC key to exit
             cv2.destroyAllWindows()
