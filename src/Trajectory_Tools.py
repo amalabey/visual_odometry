@@ -131,8 +131,8 @@ def rotateFunct(pts_l, angle, degrees=False):
 def VO_plot(T_v):
     """ Plot the VO trajectory"""
     plt.figure(1)
-    pyMVO, = plt.plot(*zip(*T_v), marker='o', color='b', label='py-MVO')
-    plt.legend(handles=[pyMVO])
+    plt.plot(*zip(*T_v), marker='o', color='b', label='py-MVO')
+    #plt.legend(handles=[pyMVO])
     # Set plot parameters and show it
     plt.axis('equal')
     plt.grid()

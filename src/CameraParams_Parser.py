@@ -66,7 +66,7 @@ class CameraParams:
                 raise IOError
 
             self.format = self.txt[idx+1].strip()
-            self.images = sorted(glob.glob(self.folder + '/*.' + self.format))
+            self.images = sorted(glob.glob(self.folder + '/*.' + self.format), reverse=False)
             print "Test: " + self.folder + '/*.' + self.format
             if len(self.images) == 0:
                 raise TypeError

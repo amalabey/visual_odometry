@@ -100,12 +100,14 @@ def run():
         # Create a CLAHE object (contrast limiting adaptive histogram equalization)
         clahe = cv2.createCLAHE(clipLimit=5.0)
         img = clahe.apply(img)
-
+        
+        '''
         if img_id != 0 and gps_switch is True:
             # Retrieve image distance in order to scale translation vectors
             prev_GPS = gps_dict.values()[img_id - 1]
             cur_GPS = gps_dict.values()[img_id]
             distance = GPS_VO.getGPS_distance(prev_GPS, cur_GPS)  # Returns the distance between current and last GPS
+        '''
 
         if vo.update(img, img_id):  # Updating the vectors in VisualOdometry class
             if img_id == 0:
