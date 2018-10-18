@@ -3,5 +3,6 @@
     "git.ignoreLimitWarning": true,
     "files.exclude": {
         "**/*.pyc": true
-      }
+    },
+    "python.linting.pylintEnabled": false
 }

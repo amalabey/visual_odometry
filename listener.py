@@ -1,10 +1,8 @@
+#!/usr/bin/env python
+
 from __future__ import print_function
 
 import os, sys
-os.chdir(os.path.expanduser('/home/amal/.virtualenvs/OpenCV-master-py2/local/lib'))
-sys.path.append(os.path.expanduser('/home/amal/.virtualenvs/OpenCV-master-py2/local/lib/python2.7/dist-packages'))
-
-
 import argparse
 from os import path
 from time import sleep
@@ -13,16 +11,22 @@ import glob
 import cv2
 import roslib
 import rospy
-
-import CameraParams_Parser as Cam_Parser
-import GPS_VO
-import Ground_Truth as GT
-import Trajectory_Tools as TT
-from Common_Modules import *
-from py_MVO import VisualOdometry
 from sensor_msgs.msg import CompressedImage
 
-VERBOSE=False
+import src.CameraParams_Parser as Cam_Parser
+import src.GPS_VO
+import src.Ground_Truth as GT
+import src.Trajectory_Tools as TT
+from src.Common_Modules import *
+from src.py_MVO import VisualOdometry
+
+
+VERBOSE=True
+
+print("CV2 Version:"+cv2.__version__)
+print("CV2 Module:"+cv2.__file__)
+if hasattr(sys, 'real_prefix'):
+    print("Python running in VENV: "+sys.prefix)
 
 class RosVisualOdometry:
     def __init__(self, cam_instrint_params, feature_detector_name, image_topic):
@@ -37,11 +41,11 @@ class RosVisualOdometry:
         if VERBOSE:
             print("received image of type: %s" % ros_data.format)
 
-        img_path = "image: "+self.img_id
+        img_path = "image: "+str(self.img_id)
 
         np_arr = np.fromstring(ros_data.data, np.uint8)
-        imgKLT = cv2.imdecode(np_arr, cv2.CV_LOAD_IMAGE_COLOR) # Read the image for real-time trajectory
-        img = cv2.imdecode(np_arr, cv2.CV_LOAD_IMAGE_MONO) # Read the image for Visual Odometry
+        imgKLT = cv2.imdecode(np_arr, 1) # Read the image for real-time trajectory
+        img = cv2.imdecode(np_arr, 0) # Read the image for Visual Odometry
 
         # Create a CLAHE object (contrast limiting adaptive histogram equalization)
         clahe = cv2.createCLAHE(clipLimit=5.0)
@@ -68,15 +72,19 @@ class RosVisualOdometry:
 
 def main(args):
     '''Initializes and cleanup ros node'''
-    image_topic = "/usb_cam/image_raw"
+    image_topic = "/usb_cam/image_raw/compressed"
     cam_instrint_params = np.array([[718.856, 0, 607.1928],
                                     [0, 718.856, 185.2157],
                                     [0, 0, 1]])
     feature_detector_name = "SIFT"
 
     ros_vo = RosVisualOdometry(cam_instrint_params, feature_detector_name, image_topic)
+    if VERBOSE:
+        print("Initializing ros node")
     rospy.init_node('image_vo', anonymous=True)
     try:
+        if VERBOSE:
+            print("Starting ros node")
         rospy.spin()
     except KeyboardInterrupt:
         print("Shutting down ROS Image feature detector module")
